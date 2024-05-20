@@ -1,0 +1,385 @@
+% ----------------------------------------------------
+% Software section
+% ----------------------------------------------------
+\documentclass[class=report,11pt,crop=false]{standalone}
+\input{../Style/ChapterStyle.tex}
+\usepackage{tabularx} % Allows for text wrapping in table cells
+\usepackage{ltablex}
+\usepackage{geometry} % Optional: adjust the page margins to better fit the table
+\geometry{left=1cm, right=1cm} % Adjusts the left and right margins
+\begin{document}
+
+\ifstandalone
+\tableofcontents
+\fi
+
+\chapter{User Interface (BHMQAI001)\label{ch:software}}
+
+% --------------------------------------------
+
+\section{Introduction}
+
+The data collected by the camera trap system is required by researchers so that further analysis and subsequent action can be carried out. This data needs to be able to be retrieved from the camera trap, displayed on a user interface and transferred to the researchers' devices. The user interface subsystem within the camera trap system serves as the primary point of interaction between researchers and the overall system, facilitating data retrieval, analysis, and interpretation. Through a systematic design approach, the design and implementation of the interface will be carried out with the requirements in mind, ensuring accessibility to the data collected and a means to store it for further analysis.
+
+The design process begins with determining user requirements and outlining functional requirements and design specifications, which are then used to make informed design choices regarding the micro-controller used, front-end design and system architecture implementation. 
+
+Throughout the design process validation is carried out through conducting various tests, which is then used to write up an acceptance test procedures analysis. These tests determine the system's performance, usability, and adherence to user requirements, validating the effectiveness of the design choices and the robustness of the final subsystem. 
+
+Following the design phase, the final system is implemented, integrating the chosen design elements to produce a cohesive and efficient user interface subsystem. 
+
+\vspace{0.5cm}
+
+% --------------------------------------------
+
+\section{User Requirements}
+
+The user requirements detail the specific needs that the researcher has with regards to the user interface of the camera trap system. These requirements were gathered through stakeholder engagement in the form of online interactions with Ben Murphy, a PhD ornithology student with the Fitzpatrick Institute of African Ornithology, and tabulated in Table 6.1 below to form the foundation of the design and implementation of a subsystem that meets the needs of its intended user. 
+
+\vspace{1cm}
+
+\begin{tabularx}{\textwidth}{|p{0.7in}|X|}
+\caption{User Requirements for the User Interface Subsystem}
+\label{tab:Q1}
+\hline
+\textbf{No.} & \textbf{User Requirements} \\
+\hline
+\endfirsthead
+
+\multicolumn{2}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\hline
+\textbf{No.} & \textbf{User Requirements} \\
+\hline
+\endhead
+
+\hline \multicolumn{2}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+UAS-1 & \textbf{Usability:} The interface should be designed such that it is easy to navigate and understand.\\
+\hline
+UAS-2 & \textbf{Data Retrieval:} Data retrieval should be conducted in a way that avoids disturbances to the birds' nests, enhancing ease of use and reducing the need for the researcher to climb the tree to retrieve the data manually. \\
+\hline
+UAS-3 & \textbf{Data Transferal:} Since the images will be analysed at the different time and location, the user application must have an option to download the images onto the user's device. \\
+\hline
+UAS-4 & \textbf{Data Storage:} The user interface should have some feature to clear the data off of the physical camera trap after it has been retrieved, in order to free up memory. \\
+\hline
+UAS-5 & \textbf{Data Display:} The retrieved data and images should be displayed in an organised and understandable format on the user interface.\\
+\hline
+\end{tabularx}
+
+
+% --------------------------------------------
+
+\section{Requirements Analysis}
+
+Table 6.2 below presents the requirements analysis of the user interface subsystem of the camera trap system, partitioned into functional requirements and corresponding design specifications. The functional requirements were identified through a detailed analysis of the user needs, aiming to ensure the effective performance and usability of the user interface. Each requirement is paired with a specific design specification outlining the approach to be implemented to meet the respective requirement. 
+
+\vspace{0.5cm}
+
+\begin{tabularx}{\textwidth}{|p{0.7in}|X|X|X|}
+\caption{Requirements Analysis} \label{tab:Q2} \\
+\hline
+\textbf{No.}&
+\textbf{Functional Requirements} & \textbf{Design Specifications}  \\
+\hline
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\hline
+\textbf{No.}&
+\textbf{Functional Requirements} & \textbf{Design Specifications}  \\
+\hline
+\endhead
+
+\hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+UAS-6 & \textbf{Real-time responsiveness:} The interface should respond to user interactions and data requests within 5 seconds. & Caching mechanisms and asynchronous loading of data shall be employed to optimize loading times and minimize delays in data retrieval.\\
+\hline
+UAS-7 & \textbf{Accessibility across devices:} The user interface should be accessible from various types of devices. & An appropriate platform will be chosen to ensure accessibility across devices. \\
+\hline
+UAS-8 & \textbf{System Health:} The designed architecture must include features for observing the health of the other subsystems. & The user interface will include features and functionality to test the cameras and display the battery percentage.  \\
+\hline
+UAS-9 & \textbf{Data Retrieval:} The application should fetch the data and images from the camera trap system wirelessly. & Implement a wireless communication protocol that can retrieve and transmit data over at least 20 meters. \\
+\hline
+UAS-10 & \textbf{Efficient data transferal:} The data and images must be accessible to the user at a different time and location. & A download feature will be implemented within the user interface to transfer data and images from the monitoring system to the user's device \\
+\hline
+UAS-11 & \textbf{User-friendly interface:} The user interface should be simple and clear to understand and navigate. & A consistent style shall be followed throughout the interface to promote an intuitive user experience.\\
+\hline
+UAS-12 & \textbf{Clear data display:} The user interface shall display retrieved data and images in an organized and understandable format. & Information shall be organised logically and presented in a structured format to aid users in locating and accessing information efficiently.\\
+\hline
+UAS-13 & \textbf{Prolonged storage management:} Storage of the data should be managed such that the SD card does not reach capacity. & There will be an option to clear all data off the SD card once the data has been downloaded to the user's device, in order to manage memory efficiently and ensure prolonged system functionality.\\
+\hline
+UAS-14 & \textbf{Authentication and Security:} The system should implement authentication and security measures to ensure authorized access. & There will be a network authentication process implemented to provide security to the system. \\
+\hline
+\end{tabularx}
+
+
+% --------------------------------------------
+
+\section{Design Choices}
+
+\subsection{Micro-controller}
+
+Various micro-controllers were investigated and analysed to determine which was the best fit for this particular system. The analysis shown in Table 6.3 below focuses on three micro-controllers (the Arduino Nano 33 IoT, ESP32-WROOM-32 and Raspberry Pi Zero W), which were chosen due to their suitability to the system as a whole. The table displays the particular features of the micro-controllers that are relevant to the user interface subsystem specifically, namely the processing and memory capabilities and offered connectivity protocols.
+
+After thorough analysis, the ESP32-WROOM-32 and Raspberry Pi Zero W were determined as the best choices for the user interface subsystem as their features best align with the defined user requirements and design specifications. The ESP32-WROOM-32 was ultimately chosen as the final choice, as detailed in the Sensing Section.
+
+The ESP32-WROOM-32's dual-core processor meets the requirement for responsiveness (UAS-6), and its memory capabilities align with data storage needs (UAS-9, UAS-10). Offering WiFi, Bluetooth, and Ethernet connectivity, it caters to accessibility demands (UAS-7) and efficient data transfer (UAS-3, UAS-14). 
+
+\begin{tabularx}{\textwidth}{|p{1.0in}|X|X|X|}
+\caption{Micro-controller Suitability Analysis}
+\label{tab:Q3}
+\hline
+\textbf{Micro-controller} & \textbf{Processor} & \textbf{Memory} & \textbf{Connectivity} \\
+\hline
+\endfirsthead
+
+\multicolumn{4}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\hline
+\textbf{Micro-controller} & \textbf{Processor} & \textbf{Memory} & \textbf{Connectivity} \\
+\hline
+\endhead
+
+\hline \multicolumn{4}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+\textbf{Arduino Nano 33 IoT} & SAMD21 Cortex processor, 48MHz: provides sufficient processing power for handling user interface tasks efficiently & 256KB flash memory, 32KB SRAM: allows for storage of moderate-sized program code and data handling & WiFi and Bluetooth (Nina W102 uBlox module), hardware support for SPI and I2C \\
+\hline
+\textbf{ESP32-WROOM-32} & Dual-core Tensilica LX6 processor, 240MHz: provides substantial processing power suitable for efficient simultaneous task handling and demanding user interface applications & 448KB ROM, 520KB SRAM: provides sufficient storage for program code and data storage required by the user interface subsystem & Wifi, Bluetooth and Ethernet connectivity \\
+\hline
+\textbf{Raspberry Pi Zero W} &  Broadcom BCM2835, 1GHz ARM11: provides significant processing power for running basic user interface applications & 512MB RAM, MicroSD card slot: RAM allows for efficient simultaneous task handling and suitable for applications that don't require extensive memory usage & WiFi and Bluetooth connectivity \\
+\hline
+\end{tabularx}
+
+\subsection{Front-end Design}
+
+Front-end design is a significant aspect of user interface design. It serves as a bridge between the users and the functionality of the system, and plays an important role in determining the user's experience with the system as a whole. Figure 6.1 below displays the initial front-end design of the user interface, which is a hand-drawn sketch of the user interface pages.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp] 
+  \centering   \includegraphics[width=0.5\textwidth]{Chapters/design2.jpg} 
+  \caption{Initial Rough Design of Front-end} 
+  \label{fig:design1} 
+\end{figure}
+
+By referring to Sections 6.2 and 6.3, the front-end was designed with the aim of aligning the features to meet the defined requirements and specifications. Emphasis was placed on making a minimalist design with a user-intuitive flow rather than implementing a design that is more aesthetically inclined. 
+
+\subsection{System Architecture}
+
+The system architecture provides an overview of the architectural framework of the user interface design and implementation. It discusses platform choice, communication protocols, developmental environments and data handling implementations, as well as security and authentication protocols specific to the subsystem. Each architectural aspect is designed to ensure intuitive usability, data access and secure interactions, therefore enhancing the overall functionality and effectiveness of the subsystem.
+
+\vspace{0.3cm}
+\textbf{Platform Choice} \\
+Various formats are available for the design of a user interface integrated with the ESP32-WROOM-32. A native mobile application on a smartphone or tablet can be designed and implemented to allow the user to view and interact with the data collected. However, the design would have to be tailored specifically to the type of device used. Since the researcher did not state their use or preference of a particular device used to receive the data, designing a mobile application is a limiting design choice. 
+
+Cloud Integration is another design option. The ESP32-WROOM-32 can be integrated with cloud services such as AWS IoT, Google Cloud IoT or Azure IoT Hub, where data can be stored, accessed and displayed using cloud-based tools. This, however, is not a viable choice in the scope of this project as these services typically incur costs based on usage and data storage. 
+
+The ESP32-WROOM-32 supports web-based applications, where a web server can be created on the module to host a web interface. Users can access this interface through any type of web browser on any device connected to the same network, allowing for remote monitoring and control of the device and its data. This versatility, along with the cost-effectiveness, scalability, ease of development and remote accessibility of web-based applications present them as the best choice for integrating with the ESP32-WROOM-32 for this subsystem. They provide an efficient solution for viewing, interacting with, and managing the collected data across various devices. An asynchronous web server was chosen to handle HTTP requests concurrently and increase the efficiency of the data handling process. 
+
+\vspace{0.3cm}
+\textbf{Communication Protocol} \\
+The ESP32-WROOM-32 is a very versatile micro-controller; able to communicate via various wireless protocols. For the camera trap system, the ideal communication protocol must be low power (aligning with the power subsystem), able to transmit a substantial amount of data (collected from the sensor subsystem) and have a minimum transmission distance of 20 meters (an approximation based on the height of the Fork-tailed Drongos' nests). 
+
+Table 6.4 below displays the capabilities of a few selected communication protocols that were researched \cite{42} in order to determine the best choice for the system.
+
+Wi-Fi was chosen as the communication protocol for the system due to it being the best fit for the necessary requirements mentioned above. There are three client-server communication protocols: HTTP Requests, Server-Sent Events and Websockets. Server-Sent events utilise HTTP connections and the event source protocol to send updates to the client, with the client being unable to send data back. HTTP requests send and receive data with the micro-controller acting an access point, and it aligns with the requirements outlined above. Websockets are also a viable choice, establishing persistent connections between the server and client and facilitating data exchange through TCP connections. 
+
+HTTP requests were selected as the client-server communication protocol as they align with the system's requirements and allow for bidirectional communication between the ESP32 and the connected devices. HTTP requests are widely supported and simple to implement, making them a practical choice for this subsystem.
+
+\begin{table}[htbp]
+\centering
+\caption{ESP32 Wireless Communication protocols}
+\label{tab:Q4}
+\begin{tabularx}{\textwidth}{|p{1.2in}|p{0.9in}|p{1.3in}|p{0.8in}|p{1.8in}|}
+\hline
+\textbf{Communication protocol} & \textbf{Power Consumption} & \textbf{Transmission Distance Capability} & \textbf{Bandwidth} & \textbf{Additional Features} \\
+\hline
+\textbf{Bluetooth Low Energy (BLE)} & Low & Short & Low & Supports broadcasting and mesh network\\
+\hline
+\textbf{Bluetooth Classic} & High & Short & Medium & Optimised for continuous data streaming\\
+\hline
+\textbf{ESP-NOW} & Low & Long & Medium & Fast\\
+\hline
+\textbf{Wi-Fi} & Low & Long & High & Exchanges data using HTTP requests, Server-Sent Events or Websockets\\
+\hline
+\textbf{LoRa} & Low & Long & Low & Requires a LoRa transmission chip for use with ESP32 \\
+\hline
+\end{tabularx}
+\end{table} 
+
+\textbf{Developmental Environment} \\
+The developmental environment encompasses the tools and languages used in the development process of the subsystem. The design choice was made to design the web application in the Arduino IDE using a combination of C++ and JavaScript in conjunction with HTML and CSS. Frameworks such as Django, Flask and Hypertext Preprocessor (PHP) were not selected due to the weight of their tools and memory requirements of their libraries. Using HTML and C++ is not only light in their resource usage, but they also allow for seamless integration with the firmware of the ESP32. Finally, the developer was familiar with HTML and C++ which aided in streamlining the development process.
+
+\vspace{0.3cm}
+\textbf{Data Handling} \\
+Data can be retrieved from the Micro-SD card by implementing either the SD.h or SDD\_\$MCC.h libraries, which use an SPI controller and an ESP32 SD/SDIO/MCC controller respectively. The SD.h library was selected for use in the subsystem due to its lighter weight and more focused design. The subsystem requires basic SD card operations on a standard SD card, therefore the SD.h library is sufficient. The data on the Micro-SD card can also be cleared using this library, effectively clearing the system's storage for the next set of camera trap images to be stored. The data is stored in the Serial Peripheral Interface Flash File System (SPIFFS), allowing it to be retrieved and displayed on the web application. The SPIFFS was selected over other file systems, such as In-Memory Storage and LittleFS, due to its file system operations, integration with web server applications and simple deployment. The data can also be pulled from the SPIFFS and downloaded to the user's device, effectively completing the full data movement.
+
+\vspace{0.3cm}
+\textbf{Security and Authentication} \\
+The ESP32 is being set as an access point to enable Wi-Fi connection, which means that it will have its own Wi-Fi network that nearby devices can connect to. The SSID and password of this network can be set by the developer and made known to the users only: effectively securing access to the web application and data. After the user has logged onto the network for the first time, they will not be required to put in the password for subsequent sign-ins. 
+
+% --------------------------------------------
+
+\section{Final Design}
+
+This section details the final front-end and back-end design of the subsystem and explains how the designs are integrated with one another and with the camera trap system as a whole.
+
+\subsection{Front-end}
+ 
+ HTML and CSS are embedded within the C++ code as strings to generate the web pages dynamically and set their style. Figure 6.2 below shows the code used to generate the home page of the web application. \textit{getHomePageContent} is a Java method which returns a string containing the HTML code, which represents the structure and content of the page. The style of the web page is saved in a separate CSS file which is linked in the <head> section of the HTML code. The other two web pages are designed with the same structure.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp] 
+  \centering  \includegraphics[width=0.8\textwidth]{Chapters/homepageHtml.JPG} 
+  \caption{HTML Code for Home Page} 
+\label{fig:homepageHtml} 
+\end{figure}
+
+\subsection{Back-end}
+
+The back-end of the subsystem consists of configuring the ESP32 as a Wi-Fi access point, establishing communication between the server and client, and setting up the data handling operations. C++ utilizes the various available libraries to implement the web server, handle asynchronous requests and interact with the file system, while HTML and CSS are embedded within the C++ code as strings to generate web pages dynamically.
+
+Appendix D shows the declaration of the access point's credentials and the assignment of a static IP address, as well as the setup of the asynchronous web server. The initialisation of the serial communication, access point set-up and mounting of the SPIFFS file system is also displayed, as well as the beginning of the definitions of HTTP routes and request handlers. 
+
+The data consists of captured images that are stored on an external SD card that acts as the data storage of the camera trap system. The SD.h library and documentation is used in conjunction with SPI to facilitate communication between the ESP32 and the Micro-SD card, fetching the data from the Micro-SD card. The retrieved data is stored in the SPIFFS file system, before it is served by the web server. HTTP requests are utilized for client-server communication, allowing the ESP32 to serve web pages and respond to requests from connected devices. HTTP endpoint are created on the web server that serves the images to the client when requested (when the 'Download Images' button is clicked). The code for these functions can be found in the Github linked in Section 8.2.
+
+\subsection{Integration Layer}
+
+The final integrated user interface subsystem is shown in Figure 6.3. The front-end and back-end designs are brought together to form a web application with data handling functionality. 
+
+The interactive elements implemented in the front-end design of the user interface trigger specific events that call various methods employed in the back-end system. Data is then transmitted from the front-end interface to the back-end server for processing. This communication process involves sending HTTP requests, receiving responses, and updating the user interface accordingly to reflect the outcome of the operation.
+
+\vspace{1cm}
+
+\begin{figure}[htbp] 
+  \centering   \includegraphics[width=0.5\textwidth]{Chapters/design3.jpg} 
+  \caption{Final User Interface Design} 
+  \label{fig:design3} 
+\end{figure}
+
+% --------------------------------------------
+
+\section{Testing and Results}
+
+Testing is an important step that occurs near the end of the design process, offering insights into the performance and user experience of the subsystem and validating its functionality and efficiency. This section presents the results of four key assessments with the goal of evaluating these results to highlight possible future areas of improvement.
+
+\subsection{Network Speed Test}
+This test was conducted to determine how quickly the web server and application starts up and responds to user requests. Web developer tools were used in this test, and the results can be seen in Figure 6.4 below. The test is run multiple times, and each time it is observed that the web server sets up in approximately under one hundred milliseconds. 
+
+However, there are errors when attempting to start up the web application with a significantly larger number of images. This poses a problem as the camera trap system will need to save a large quantities of images to the file server at a time.
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp] 
+  \centering   \includegraphics[width=0.25\textwidth]{Chapters/loadTime.JPG} 
+  \caption{Network Speed Test Results} 
+  \label{fig:test1} 
+\end{figure}
+
+\subsection{Data Transfer Test}
+The data transfer test involved retrieving images from the file server and populating the web application. This test was successful, proved by the visibly populated images on the web application as well as the developer tools (displayed in Figure 6.5 below). 
+
+\vspace{0.5cm}
+
+\begin{figure}[htbp] 
+  \centering   \includegraphics[width=0.4\textwidth]{Chapters/dataTrans.JPG} 
+  \caption{Data Transferal Test Results} 
+  \label{fig:test2} 
+\end{figure}
+
+\subsection{Accessibility Test}
+Figure 6.3 shows screenshots of the web application running on Safari on a mobile device. The web application was also run on Google Chrome and Mozilla Firefox on a laptop and tablet to test the application's adaptability to different types of browsers and devices, with positive results for each browser and device type. The stylistic design of the pages ensure that the content is always centered to the device's screen size and orientation. 
+
+\subsection{Usability Survey}
+A usability survey (which can be seen in Appendix E) was conducted to evaluate and determine the overall usability of the web application. By collecting feedback, we can identify and isolate areas of improvement and implement iterative design to enhance usability and user satisfaction. 
+
+The usability survey consisted of a simple google form with five questions that the respondents completed after viewing and navigating through the web application. The respondents consisted of a selection of ten random people that were asked to participate, and the questions were designed with the user requirements in mind. The results of the survey displayed that the respondents found the web application easy to navigate and user friendly, with an highly-rated overall usability of 8.8/10. However, it was also discovered that the respondents found that the application sometimes responded slowly to their requests.
+
+\subsection{Acceptance Test Procedures Analysis}
+
+Acceptance Test Procedures (ATPs) are derived from the subsystem requirements and are used to test the subsystem's performance and determine if its objectives have been met. For this user interface subsystem, User Acceptance Testing (UAT) was chosen to be implemented and the results are displayed in Table 6.5 below. 
+
+\begin{tabularx}{\textwidth}{|p{0.7in}|p{1.5in}|X|X|}
+\caption{Acceptance Test Procedures and Results} \label{tab:Q4} \\
+\hline
+\textbf{No.} & \textbf{Test Description} & \textbf{Acceptance Criteria} & \textbf{Test Result} \\
+\hline
+\endfirsthead
+
+\multicolumn{4}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+\hline
+\textbf{No.} & \textbf{Test Description} & \textbf{Acceptance Criteria} & \textbf{Test Result} \\
+\hline
+\endhead
+
+\hline \multicolumn{4}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline
+\endlastfoot
+
+UAT-1 & Usability & The interface should be designed such that it is easy to navigate and understand. & \textbf{Passed:} The user interface was rated an 8.8/10 in the usability survey. \\
+\hline
+UAT-2 & Data Retrieval & Data retrieval should be conducted in a way that avoids disturbances to the birds' nests, enhancing ease of use and reducing the need for the researcher to climb the tree to retrieve the data manually. & \textbf{Passed:} The data can be successfully retrieved wirelessly via Wi-Fi HTTP protocols from a maximum distance of approximately 50 meters.\\
+\hline
+UAT-3 & Data Transferal & Since the images will be analyzed at different times and locations, the user application must have an option to download the images onto the user's device. & \textbf{Passed:} The user can download the jpeg images from the web application to their device.\\
+\hline
+UAT-4 & Data Storage & The user interface should have some feature to clear the data off of the physical camera trap after it has been retrieved, in order to free up memory.& \textbf{Failed:} There is implemented functionality to clear the data off the SD card after it has been retrieved, but it is not always successful with larger data groups.\\
+\hline
+UAT-5 & Data Display & The retrieved data and images should be displayed in an organized and understandable format on the web interface. & \textbf{Passed:} The usability survey indicated a rating of 4.7/5 for the data display.\\
+\hline
+UAT-6 & Real-time responsiveness & The interface should respond to user interactions and data requests within 5 seconds. & \textbf{Failed:} The system does not always respond promptly and occasionally requires more than 5 seconds to respond to requests.\\
+\hline
+UAT-7 & Accessibility across devices & The user interface should be accessible from various types of devices. & \textbf{Passed:} As seen in the accessibility test, the web application is accessible across all devices and browsers.\\
+\hline
+UAT-8 & System Health & The designed architecture must include features for observing the health of the other subsystems. & \textbf{Passed:} There is functionality for taking a test image on the camera and the battery health is displayed.\\
+\hline
+UAT-14 & Authentication and Security & The system should implement authentication and security measures to ensure authorized access. & \textbf{Passed:} The Wi-Fi network requires credentials in order to be accessed, and the IP address of the web application must also be known in order to view it.\\
+\hline
+\end{tabularx}
+
+The majority of the ATPs were met, indicating relatively successful adherence to the specified requirements and objectives of the user interface subsystem. 
+
+Data Storage (UAS-4) and Real-time Responsiveness (UAS-6) did not pass. In Data Storage, the system occasionally fails to clear data from the camera trap's SD card effectively, potentially due to memory constraints or algorithm inefficiencies. This issue can disrupt system performance, particularly when dealing with larger datasets. Similarly, Real-time Responsiveness problems may arise from software inefficiencies or network congestion, causing delays in user interactions and data requests. To overcome these challenges, improvements in algorithm efficiency, error handling, and network optimization are essential to ensure smoother system operation and better response times.
+
+Other aspects of the system, such as Usability (UAS-1) and Data Retrieval (UAS-2), performed well. The user interface received high usability ratings, indicating ease of navigation and understanding for users. Additionally, data retrieval methods via Wi-Fi HTTP protocols proved successful, minimizing disturbances to bird nests during data collection. These successes highlight the system's potential and effectiveness in meeting user requirements and objectives.
+
+Moving forward, by addressing the identified failures and  prioritising implementing improvements the system can better fulfill user needs and expectations while delivering a seamless and efficient user experience.
+
+% --------------------------------------------
+
+\section{Conclusion}
+
+In conclusion, the user interface subsystem successfully bridges the gap between the camera trap system and the researcher. Through requirements analysis and iterative design, a user-centric interface that meets the diverse needs of researchers like Ben Murphy has been created .
+
+The subsystem relies on a web-based application architecture to facilitate remote access and seamless data management across devices. Leveraging the ESP32-WROOM-32 micro-controller's web-server capabilities, emphasis was placed on simplicity and functionality in the front-end design, resulting in a minimalist interface. 
+
+The choice of Wi-Fi communication, enabled by HTTP requests, ensures low power consumption, long-range connectivity, and compatibility with the ESP32-WROOM-32. Incorporating lightweight resource usage and seamless integration with micro-controller firmware, a user-friendly and efficient interface was developed. Additionally, a credential-based authorisation has been implemented for access to the web application.
+
+Through extensive testing and validation, the user interface subsystem has proven to be reliable, efficient, and secure, catering to the specific needs of ornithologists. This subsystem ensures uninterrupted operation and seamless data collection, empowering researchers to monitor the fork-tailed drongo effectively in various field conditions.
+
+
+% --------------------------------------------
+
+
+\ifstandalone
+\bibliography{../Bibliography/References.bib}
+\fi
+\end{document}
+
+% --------------------
